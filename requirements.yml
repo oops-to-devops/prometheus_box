@@ -4,7 +4,11 @@
   name: sa_prometheus
 - src: softasap.sa-prometheus-alertmanager
   name: sa_prometheus_alertmanager
+- src: softasap.sa-prometheus-exporters
+  name: sa_prometheus_exporters
 - src: softasap.sa_acme_sh
   name: sa_acme_sh
-
-
+- src: softasap.sa-nginx
+  name: sa_nginx
+- src: softasap.sa-grafana
+  name: sa_grafana

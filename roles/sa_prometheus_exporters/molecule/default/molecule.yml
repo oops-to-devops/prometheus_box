@@ -55,30 +55,18 @@ ansible:
   #   pipelining: True
 
 platforms:
-  #  - name: bionic
-  #    box: ubuntu/bionic64
-  #    memory: 4096
-  #    cpus: 2
-
-    - name: xenial
-      box: ubuntu/xenial64
-      memory: 4096
-      cpus: 2
-      groups:
-        - prometheus_box
-      # optional - box is accesible from your real network
-#      interfaces:
-#        - network_name: private_network
-#          type: dhcp
-#          auto_config: true
+  - name: bionic
+    box: ubuntu/bionic64
+    memory: 4096
+    cpus: 2
+    # optional - box is accesible from your real network
+#    interfaces:
+#      - network_name: private_network
+#        type: dhcp
+#        auto_config: true
 
 
-  # - name: centos7
-  #   box: centos/7
-  #   memory: 4096
-  #   cpus: 2
-
-      # interfaces:
+    # interfaces:
     #   - auto_config: true
     #     network_name: private_network
     #     type: dhcp
@@ -117,12 +105,11 @@ provisioner:
   config_options:
     defaults:
       callback_whitelist: profile_roles,profile_tasks,timer
-  #    roles_path: "roles:../../roles"
   # playbooks:
   #   create: ../../../../../resources/playbooks/vagrant/create.yml
   #   destroy: ../../../../../resources/playbooks/vagrant/destroy.yml
-    env:
-      ANSIBLE_ROLES_PATH: "roles:../../roles"
+  # env:
+  #   ANSIBLE_ROLES_PATH: ../../../../../resources/roles/
   lint:
     name: ansible-lint
 verifier:

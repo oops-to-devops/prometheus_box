@@ -1,5 +1,5 @@
 ---
-- hosts: oops_box
+- hosts: prometheus_box
   gather_facts: False
 
   vars:
@@ -55,6 +55,9 @@
      - {
         role: "sa_prometheus_exporters",
         prometheus_exporters: "{{box_prometheus_exporters}}"
+       }
+     - {
+         role: "sa_acme_sh",
        }
 
 
