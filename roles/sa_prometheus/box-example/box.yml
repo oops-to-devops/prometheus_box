@@ -1,0 +1,35 @@
+---
+- hosts: www
+
+  vars:
+    - root_dir: ..
+
+
+  pre_tasks:
+    - debug: msg="Pre tasks section"
+
+  roles:
+     - {
+         role: "sa-prometheus"
+       }
+     - {
+         role: "sa-nginx"
+       }
+     - {
+         role: "sa-grafana"
+       }
+
+
+  tasks:
+
+    - debug: msg="Tasks section"
+
+    - template: src="{{root_dir}}/templates/grafana.conf.j2" dest="/etc/nginx/sites-enabled/grafana"
+      become: yes
+
+    - template: src="{{root_dir}}/templates/prometheus.conf.j2" dest="/etc/nginx/sites-enabled/prometheus"
+      become: yes
+
+
+    - service: name="nginx" state="restarted"
+      become: yes

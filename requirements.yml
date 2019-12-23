@@ -1,0 +1,10 @@
+- src: softasap.sa-include
+  name: sa_include
+- src: softasap.sa-prometheus
+  name: sa_prometheus
+- src: softasap.sa-prometheus-alertmanager
+  name: sa_prometheus_alertmanager
+- src: softasap.sa_acme_sh
+  name: sa_acme_sh
+
+

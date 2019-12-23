@@ -1,0 +1,32 @@
+---
+# defaults file for sa-prometheus
+
+role_dir: "{{role_path}}"
+
+option_install_go: false
+go_version: 1.6
+
+
+prometheus_user:   prometheus
+prometheus_group:  prometheus
+
+prometheus_base_dir: /opt/prometheus
+prometheus_data_dir: "{{ prometheus_base_dir }}/data"
+prometheus_exporters_dir: "{{prometheus_base_dir}}/exporters"
+prometheus_exporters_config_dir: /etc/prometheus/exporters
+
+
+prometheus_version:                 "2.14.0"
+prometheus_node_exporter_version:   "0.18.1"
+prometheus_alertmanager_version:    "0.20.0"
+
+prometheus_config_path:          /etc/prometheus
+prometheus_rule_path:            "{{ prometheus_config_path }}/rules"
+prometheus_file_sd_config_path:  "{{ prometheus_config_path }}/tgroups"
+
+#prometheus_extra_startup_params: "--web.enable-admin-api"
+prometheus_extra_startup_params: ""
+
+prometheus_rules: []
+
+prometheus_dist_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"

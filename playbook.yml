@@ -1,0 +1,63 @@
+---
+- hosts: oops_box
+  gather_facts: False
+
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ ansible_host }}"
+
+    - set_fact:
+        remote_ip_address: "{{ ansible_host }}"
+
+    - include_vars: "defaults/main.yml"
+
+    - name: ANSIBLE PYTHON | install fallback python if needed
+      raw: test -e /usr/bin/python || /usr/bin/python3 || (apt -qqy update && apt install -qy python-minimal)
+      become: yes
+
+    - name:  UNPRIVILEGED USERS | Get acl dependency (ansible unprivileged user operations magic)
+      apt: pkg="acl"
+      become: yes
+      when: ansible_os_family == 'Debian'
+
+    - name: gather facts
+      setup:
+
+    - name: Check for common pretasks
+      local_action: stat path="{{ shared_dir }}/common_pretasks.yml"
+      register: common_pretasks_exists
+      tags: always
+
+    - name: Include common pretasks
+      include_tasks: "{{ shared_dir }}/common_pretasks.yml"
+      when: common_pretasks_exists.stat.exists == true
+      tags: always
+
+  roles:
+     - {
+         role: "sa_prometheus",
+         prometheus_extra_startup_params: "--web.enable-admin-api"
+       }
+     - {
+         role: "sa_nginx"
+       }
+     - {
+         role: "sa_grafana",
+         grafana_admin_password: "{{monitoring_grafana_password}}",
+         grafana_properties: "{{monitoring_grafana_properties}}"
+       }
+     - {
+         role: "sa_prometheus_alertmanager",
+       }
+     - {
+        role: "sa_prometheus_exporters",
+        prometheus_exporters: "{{box_prometheus_exporters}}"
+       }
+
+
+  tasks:
+
+    - debug: msg="Tasks section"
