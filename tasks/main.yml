@@ -1,1 +1,5 @@
 ---
+
+  - include_tasks: tasks_prometheus_nginx.yml
+
+  - include_tasks: tasks_grafana_configure.yml

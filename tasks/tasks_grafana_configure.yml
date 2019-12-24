@@ -1,0 +1,26 @@
+---
+  - name: Grafana | create provisioning dir
+    file:
+      path: "{{ item }}"
+      state: "directory"
+      owner: "root"
+      group: "grafana"
+    become: yes
+    with_items:
+      - "{{ monitoring_grafana_provisioning_dir }}"
+      - "{{ monitoring_grafana_provisioning_dir }}/datasources"
+      - "{{ monitoring_grafana_provisioning_dir }}/dashboards"
+    tags:
+      - monitoring
+      - update
+
+  - name: Grafana | Pre-register prometheus datasource
+    template:
+      src: "grafana/datasources/prometheus.yml.j2"
+      dest: "{{ monitoring_grafana_provisioning_dir }}/datasources/prometheus.yaml"
+      owner: "root"
+      group: "grafana"
+    become: yes
+    tags:
+      - monitoring
+      - update

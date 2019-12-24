@@ -1,0 +1,111 @@
+---
+  - name: Prometheus | Ensure custom SSL dir present
+    file:
+      path: "{{ monitoring_ssl_path }}"
+      state: "directory"
+      owner: "root"
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - name: Prometheus | Generate dhparam.pem if needed
+    command: "openssl dhparam -out /etc/nginx/dhparam.pem 2048"
+    args:
+      creates: "/etc/nginx/dhparam.pem"
+    when: monitoring_protocol_scheme == "https"
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - name: Prometheus | Check certificates presence
+    stat:
+      path: "{{monitoring_ssl_path}}/privkey.pem"
+    register: cert_result
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - block:
+
+      - name: Self signed | Install last stable
+        apt: update-cache=yes force=yes state=present pkg=openssl
+        become: yes
+        tags:
+          - monitoring
+          - update
+
+      - name: Self signed | Ensure cert dir
+        file: path="{{monitoring_ssl_path}}" state="directory"
+        become: yes
+        tags:
+          - monitoring
+          - update
+
+      - name: Self signed | Generate self signed passwordless certificate
+        command: openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=EU/ST=Ukraine/L=Lviv/O=Dis/CN={{ monitoring_primary_domain }}" -keyout {{monitoring_ssl_path}}/privkey.pem  -out {{monitoring_ssl_path}}/fullchain.pem
+        become: yes
+        tags:
+          - monitoring
+          - update
+
+    when: cert_result.stat.exists == False
+
+  - name: Monitoring | Ensure /var/wwww
+    file:
+      path: "/var/www"
+      state: "directory"
+      owner: "root"
+      group: "www-data"
+      mode: "u=rwx,g=rwx,o=rx"
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - name: Monitoring | Ensure target directory present
+    file:
+      path: "{{ item }}"
+      state: "directory"
+      owner: "{{ ansible_user_id }}"
+      group: "www-data"
+      mode: "u=rwx,g=rx,o=rx"
+    with_items:
+      - "{{ monitoring_base_dir }}"
+      - "{{ monitoring_base_dir }}/.well-known/acme-challenge"
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - name: Monitoring | htpasswd dependency
+    package: name="apache2-utils" state="present"
+    become: yes
+    when: ansible_os_family == 'Debian'
+    tags:
+      - monitoring
+      - update
+
+  - name: Monitoring | htpasswd dependency
+    package: name="httpd-tools" state="present"
+    become: yes
+    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+    tags:
+      - monitoring
+      - update
+
+  - name: Monitoring | Pregenerate htpasswd entry
+    shell: "htpasswd -b -c {{ monitoring_auth_file }} grafana {{ monitoring_grafana_password }}"
+    become: yes
+    tags:
+      - monitoring
+      - update
+
+  - name: Monitoring | Template nginx config
+    template: src="nginx/monitoring_{{ monitoring_protocol_scheme }}.conf.j2" dest="/etc/nginx/sites-enabled/monitoring.conf"
+    become: yes
+    tags:
+      - monitoring
+      - update

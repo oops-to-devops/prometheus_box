@@ -67,10 +67,10 @@ platforms:
       groups:
         - prometheus_box
       # optional - box is accesible from your real network
-#      interfaces:
-#        - network_name: private_network
-#          type: dhcp
-#          auto_config: true
+      interfaces:
+        - network_name: private_network
+          type: dhcp
+          auto_config: true
 
 
   # - name: centos7

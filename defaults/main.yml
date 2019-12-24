@@ -1,1 +1,30 @@
 ---
+
+monitoring_primary_domain: monitoring.domain.local
+
+monitoring_grafana_properties:
+  - {regexp: "^;root_url *", line: "root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana"}
+  - {regexp: "^;allow_sign_up *", line: "allow_sign_up = false"}
+
+monitoring_grafana_password: q
+
+monitoring_base_dir: /var/www/monitoring
+
+monitoring_protocol_scheme: https
+monitoring_ssl_path: /etc/nginx/ssl/monitoring
+
+monitoring_auth_file: /etc/nginx/monitoring.htpasswd
+
+monitoring_grafana_provisioning_dir: /etc/grafana/provisioning
+
+monitoring_prometheus_exporters:
+  - {
+    name: node
+    }
+  - {
+    name: blackbox
+    }
+  - {
+    name: ssl
+    }
+
