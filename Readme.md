@@ -57,3 +57,13 @@ datasources:
   editable: true
 
 ```
+
+Reasonable dashboards
+
+#1860  (for Node)
+#7362  (for MySQL)
+#2322  (for Elastic search)
+#37    (for Memcached)
+#11199 (for NGINX)
+#5579  (for PHPFPM)
+#763   (for RedisExporter)

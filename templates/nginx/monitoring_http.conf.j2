@@ -2,6 +2,7 @@ server {
     listen 80 default;
 
     location /.well-known/acme-challenge/ {
+      auth_basic "off";
       alias {{ monitoring_base_dir }}/.well-known/acme-challenge/;
     }
 

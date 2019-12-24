@@ -6,7 +6,7 @@ monitoring_grafana_properties:
   - {regexp: "^;root_url *", line: "root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana"}
   - {regexp: "^;allow_sign_up *", line: "allow_sign_up = false"}
 
-monitoring_grafana_password: q
+monitoring_grafana_password: MolEtEOuNCEN
 
 monitoring_base_dir: /var/www/monitoring
 

@@ -1,0 +1,16 @@
+  - git: git@github.com:rfrail3/grafana-dashboards.git
+    version: master
+    files:
+      - src: prometheus/apache-exporter-full.json
+        dst: templates/grafana/dashboards
+      - src: prometheus/haproxy-2.0-full.json
+        dst: templates/grafana/dashboards
+      - src: prometheus/nfs-full.json
+        dst: templates/grafana/dashboards
+      - src: prometheus/node-exporter-full.json
+        dst: templates/grafana/dashboards
+  - git: git@github.com:oliver006/redis_exporter.git
+    version: master
+    files:
+      - src: contrib/grafana_prometheus_redis_dashboard.json
+        dst: templates/grafana/dashboards
