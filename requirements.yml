@@ -12,3 +12,6 @@
   name: sa_nginx
 - src: softasap.sa-grafana
   name: sa_grafana
+- src: softasap.sa_loki
+  name: sa_loki
+

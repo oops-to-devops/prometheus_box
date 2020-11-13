@@ -3,7 +3,7 @@
     files:
       - src: prometheus/apache-exporter-full.json
         dst: templates/grafana/dashboards
-      - src: prometheus/haproxy-2.0-full.json
+      - src: prometheus/haproxy-2-full.json
         dst: templates/grafana/dashboards
       - src: prometheus/nfs-full.json
         dst: templates/grafana/dashboards
