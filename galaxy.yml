@@ -1,7 +1,7 @@
 namespace: "softasap"
 name: "prometheus_box"
 description: wraps sa_prometheus and sa_prometheus_alertmanager roles in one setup
-version: "0.0.1"
+version: 0.1.0
 readme: "Readme.md"
 authors:
     - "Vyacheslav Voronenko"
